@@ -1,0 +1,543 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>نتائج الفصل الأول - مدرسة النيل التعليمية - طالبات</title>
+<meta name="description" content="فحص نتائج ومعدل الطالبة في مدرسة النيل التعليمية - طالبات عبر رقم الهوية">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;
+  background:linear-gradient(160deg,#f472b6 0%,#ec4899 30%,#db2777 60%,#be185d 100%);
+  min-height:100dvh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:24px 16px 40px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* البطاقة الرئيسية */
+.main-card{
+  width:100%;max-width:420px;
+  background:#fff;
+  border-radius:22px;
+  box-shadow:0 8px 40px rgba(0,0,0,.15),0 2px 10px rgba(0,0,0,.08);
+  overflow:hidden;
+  padding:28px 22px 24px;
+}
+
+/* الشعار */
+.logo-section{
+  text-align:center;
+  margin-bottom:16px;
+}
+.logo-wrap{
+  width:120px;height:120px;
+  margin:0 auto 14px;
+  border-radius:50%;
+  overflow:hidden;
+  background:#fff;
+  padding:6px;
+  box-shadow:0 3px 15px rgba(219,39,119,.15);
+  border:3px solid #fbcfe8;
+}
+.logo-wrap img{
+  width:100%;height:100%;
+  object-fit:contain;
+  border-radius:50%;
+}
+
+/* العنوان */
+.title{
+  text-align:center;
+  margin-bottom:20px;
+}
+.title h1{
+  font-size:1.15rem;font-weight:700;
+  color:#be185d;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.title h1 svg{width:20px;height:20px;flex-shrink:0;color:#be185d}
+
+/* قسم البحث */
+.search-section{
+  margin-bottom:10px;
+}
+.input-wrap{
+  position:relative;
+  margin-bottom:12px;
+}
+.input-wrap input{
+  width:100%;
+  padding:13px 16px 13px 44px;
+  background:#fdf2f8;
+  border:1.5px solid #fbcfe8;
+  border-radius:12px;
+  color:#1f2937;
+  font-family:inherit;
+  font-size:.95rem;font-weight:500;
+  outline:none;
+  transition:border .2s,box-shadow .2s;
+  -webkit-appearance:none;
+  text-align:right;direction:ltr;
+  letter-spacing:.3px;
+}
+.input-wrap input::placeholder{
+  color:#9ca3af;font-weight:400;
+  direction:rtl;letter-spacing:0;
+}
+.input-wrap input:focus{
+  border-color:#ec4899;
+  box-shadow:0 0 0 3px rgba(236,72,153,.12);
+  background:#fff;
+}
+.input-wrap svg{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  color:#9ca3af;pointer-events:none;width:18px;height:18px;
+}
+.btn-search{
+  width:100%;
+  padding:12px;
+  background:linear-gradient(135deg,#ec4899,#db2777);
+  border:none;border-radius:12px;
+  color:#fff;font-family:inherit;
+  font-size:.9rem;font-weight:600;
+  cursor:pointer;
+  transition:opacity .2s,transform .1s;
+  box-shadow:0 3px 12px rgba(219,39,119,.25);
+  display:flex;align-items:center;justify-content:center;gap:7px;
+}
+.btn-search svg{width:18px;height:18px}
+.btn-search:hover{opacity:.92}
+.btn-search:active{transform:scale(.98)}
+
+/* خطأ */
+.error-msg{
+  margin-top:14px;
+  padding:14px;
+  background:#fff1f2;
+  border:1.5px solid #fecdd3;
+  border-radius:12px;
+  text-align:center;
+  color:#be123c;
+  font-size:.85rem;font-weight:500;
+  display:none;
+  animation:fadeUp .3s ease;
+}
+
+/* ======= قسم النتيجة ======= */
+#resultSection{display:none;animation:fadeUp .4s cubic-bezier(.22,1,.36,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
+
+/* معلومات الطالبة */
+.student-info{
+  border:1.5px solid #f3e8ff;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:16px;
+  background:#fefcff;
+}
+.info-line{
+  text-align:center;
+  margin-bottom:8px;
+  font-size:.9rem;
+  line-height:1.7;
+}
+.info-line:last-child{margin-bottom:0}
+.info-label{
+  color:#be185d;
+  font-weight:700;
+}
+.info-value{
+  color:#1f2937;
+  font-weight:500;
+}
+
+/* جدول الدرجات */
+.grades-table-wrap{
+  margin-bottom:16px;
+  border-radius:14px;
+  overflow:hidden;
+  border:1.5px solid #fce7f3;
+}
+table.grades{
+  width:100%;
+  border-collapse:collapse;
+}
+table.grades th{
+  background:#fdf2f8;
+  color:#be185d;
+  font-weight:700;
+  font-size:.85rem;
+  padding:11px 16px;
+  text-align:center;
+  border-bottom:2px solid #fbcfe8;
+}
+table.grades td{
+  padding:10px 16px;
+  text-align:center;
+  font-size:.88rem;
+  font-weight:600;
+  border-bottom:1px solid #fce7f3;
+  color:#1f2937;
+}
+table.grades tbody tr:last-child td{border-bottom:none}
+table.grades td:first-child{
+  text-align:right;
+  font-weight:600;
+  color:#4b5563;
+}
+table.grades tbody tr:hover{background:#fdf2f8}
+
+/* زر حساب المعدل */
+.btn-calc{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#ec4899,#db2777);
+  border:none;border-radius:14px;
+  color:#fff;font-family:inherit;
+  font-size:1rem;font-weight:700;
+  cursor:pointer;
+  transition:opacity .2s,transform .1s;
+  box-shadow:0 4px 16px rgba(219,39,119,.3);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  margin-bottom:0;
+}
+.btn-calc svg{width:20px;height:20px}
+.btn-calc:hover{opacity:.92}
+.btn-calc:active{transform:scale(.98)}
+
+/* ======= قسم النتائج بعد الحساب ======= */
+#avgSection{display:none;animation:fadeUp .4s ease}
+
+.avg-display{
+  text-align:center;
+  padding:20px 16px;
+  margin-top:16px;
+  background:linear-gradient(135deg,#fdf2f8,#fce7f3);
+  border-radius:14px;
+  border:1.5px solid #fbcfe8;
+}
+.avg-big{
+  font-size:3rem;
+  font-weight:800;
+  color:#be185d;
+  line-height:1;
+  margin-bottom:6px;
+}
+.avg-label-text{
+  font-size:.8rem;
+  color:#9d174d;
+  font-weight:500;
+  margin-bottom:10px;
+}
+
+/* شارة التقدير */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:6px 18px;
+  border-radius:20px;
+  font-size:.82rem;font-weight:700;
+  background:#fce7f3;
+  color:#be185d;
+}
+.badge.warn{background:#fef9c3;color:#a16207}
+.badge.danger{background:#fee2e2;color:#b91c1c}
+.badge svg{width:15px;height:15px}
+
+/* إحصائيات */
+.stats-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.stat-item{
+  background:#fff;
+  border:1.5px solid #fce7f3;
+  border-radius:12px;
+  padding:12px 8px;
+  text-align:center;
+}
+.stat-item .s-label{
+  font-size:.72rem;
+  color:#9ca3af;
+  font-weight:500;
+  margin-bottom:4px;
+}
+.stat-item .s-value{
+  font-size:1.1rem;
+  font-weight:800;
+  color:#be185d;
+}
+
+/* الفوتر */
+.card-footer{
+  margin-top:20px;
+  text-align:center;
+  padding-top:16px;
+  border-top:1px solid #fce7f3;
+}
+.card-footer p{
+  color:#9ca3af;
+  font-size:.75rem;
+  line-height:1.7;
+}
+.card-footer .name{
+  color:#be185d;
+  font-weight:700;
+}
+</style>
+</head>
+<body>
+
+<div class="main-card">
+
+  <!-- الشعار -->
+  <div class="logo-section">
+    <div class="logo-wrap">
+      <img src="logo.png" alt="شعار مدرسة النيل التعليمية - طالبات">
+    </div>
+  </div>
+
+  <!-- العنوان -->
+  <div class="title">
+    <h1>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      نتائج الفصل الأول (2025-2026)
+    </h1>
+  </div>
+
+  <!-- قسم البحث -->
+  <div class="search-section" id="searchSection">
+    <div class="input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="tel" id="sid" placeholder="أدخلي رقم الهوية" inputmode="numeric" autocomplete="off">
+    </div>
+    <button class="btn-search" id="goBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      بحث
+    </button>
+    <div class="error-msg" id="err">لم يتم العثور على طالبة بهذا الرقم، تأكدي من صحة رقم الهوية.</div>
+  </div>
+
+  <!-- قسم النتيجة (يظهر بعد البحث) -->
+  <div id="resultSection">
+
+    <!-- معلومات الطالبة -->
+    <div class="student-info">
+      <div class="info-line">
+        <span class="info-label">اسم الطالبة: </span>
+        <span class="info-value" id="rN"></span>
+      </div>
+      <div class="info-line">
+        <span class="info-label">رقم الهوية: </span>
+        <span class="info-value" id="rID"></span>
+      </div>
+      <div class="info-line">
+        <span class="info-label">المدرسة: </span>
+        <span class="info-value">مدرسة النيل التعليمية - طالبات</span>
+      </div>
+      <div class="info-line">
+        <span class="info-label">المرحلة: </span>
+        <span class="info-value" id="rC"></span>
+      </div>
+    </div>
+
+    <!-- جدول الدرجات -->
+    <div class="grades-table-wrap">
+      <table class="grades">
+        <thead>
+          <tr>
+            <th>المادة الدراسية</th>
+            <th>الدرجة</th>
+          </tr>
+        </thead>
+        <tbody id="gradesBody"></tbody>
+      </table>
+    </div>
+
+    <!-- زر حساب المعدل -->
+    <button class="btn-calc" id="calcBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      حساب المعدل
+    </button>
+
+    <!-- قسم المعدل (يظهر بعد الضغط على حساب المعدل) -->
+    <div id="avgSection">
+      <div class="avg-display">
+        <div class="avg-label-text">المعدل العام</div>
+        <div class="avg-big" id="rA"></div>
+        <div style="margin-top:8px">
+          <span class="badge" id="rB">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span id="rBText"></span>
+          </span>
+        </div>
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="s-label">مجموع الدرجات</div>
+            <div class="s-value" id="rTotal"></div>
+          </div>
+          <div class="stat-item">
+            <div class="s-label">الترتيب على الصف</div>
+            <div class="s-value" id="rRank"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- الفوتر -->
+  <div class="card-footer">
+    <p>مع تحيات مديرة المدرسة</p>
+    <p class="name">أ. مها محمد الوالي</p>
+  </div>
+
+</div>
+
+<script>
+const STUDENTS = {};
+
+function buildFromCSV(csvText) {
+  const lines = csvText.trim().split('\n');
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].replace(/\r/g, '').split(',');
+    if (cols.length < 16) continue;
+
+    const id = cols[2].trim();
+    const name = cols[3].trim();
+    const section = cols[1].trim();
+    const avg = parseFloat(cols[15]) || 0;
+
+    const grades = {};
+    const math = cols[4] ? parseFloat(cols[4]) : null;
+    const science = cols[5] ? parseFloat(cols[5]) : null;
+    const english = cols[6] ? parseFloat(cols[6]) : null;
+    const arabic = cols[7] ? parseFloat(cols[7]) : null;
+    const biology = cols[9] ? parseFloat(cols[9]) : null;
+    const physics = cols[10] ? parseFloat(cols[10]) : null;
+    const chemistry = cols[11] ? parseFloat(cols[11]) : null;
+    const arabic2 = cols[12] ? parseFloat(cols[12]) : null;
+    const history = cols[13] ? parseFloat(cols[13]) : null;
+    const geography = cols[14] ? parseFloat(cols[14]) : null;
+
+    if (section.includes('العاشر')) {
+      if (math) grades['الرياضيات'] = math;
+      if (english) grades['اللغة الإنجليزية'] = english;
+      if (biology) grades['الأحياء'] = biology;
+      if (physics) grades['الفيزياء'] = physics;
+      if (chemistry) grades['الكيمياء'] = chemistry;
+      if (arabic2) grades['اللغة العربية'] = arabic2;
+      else if (arabic) grades['اللغة العربية'] = arabic;
+    } else if (section.includes('العلمي')) {
+      if (math) grades['الرياضيات'] = math;
+      if (english) grades['اللغة الإنجليزية'] = english;
+      if (arabic) grades['اللغة العربية'] = arabic;
+      if (biology) grades['الأحياء'] = biology;
+      if (physics) grades['الفيزياء'] = physics;
+      if (chemistry) grades['الكيمياء'] = chemistry;
+    } else if (section.includes('الأدبي')) {
+      if (math) grades['الرياضيات'] = math;
+      if (english) grades['اللغة الإنجليزية'] = english;
+      if (arabic) grades['اللغة العربية'] = arabic;
+      if (history) grades['التاريخ'] = history;
+      if (geography) grades['الجغرافيا'] = geography;
+    } else {
+      if (math) grades['الرياضيات'] = math;
+      if (science) grades['العلوم / تربية وطنية'] = science;
+      if (english) grades['اللغة الإنجليزية'] = english;
+      if (arabic) grades['اللغة العربية'] = arabic;
+    }
+
+    STUDENTS[id] = [name, section, grades, avg];
+  }
+}
+
+fetch('جميع_الطالبات.csv')
+  .then(r => r.text())
+  .then(t => buildFromCSV(t))
+  .catch(() => {});
+
+const $ = id => document.getElementById(id);
+
+let currentStudent = null;
+
+function getClassRank(section, avg) {
+  const avgs = [];
+  for (const id in STUDENTS) {
+    if (STUDENTS[id][1] === section) avgs.push(STUDENTS[id][3]);
+  }
+  avgs.sort((a, b) => b - a);
+  return { rank: avgs.indexOf(avg) + 1, total: avgs.length };
+}
+
+function searchStudent() {
+  const id = $('sid').value.trim();
+  $('resultSection').style.display = 'none';
+  $('avgSection').style.display = 'none';
+  $('err').style.display = 'none';
+  if (!id) return;
+
+  const s = STUDENTS[id];
+  if (!s) { $('err').style.display = 'block'; return; }
+
+  currentStudent = { id, name: s[0], section: s[1], grades: s[2], avg: s[3] };
+
+  $('rN').textContent = s[0];
+  $('rID').textContent = id;
+  $('rC').textContent = s[1];
+
+  // بناء جدول الدرجات
+  const tbody = $('gradesBody');
+  tbody.innerHTML = '';
+  for (const [subj, grade] of Object.entries(s[2])) {
+    if (grade === null || isNaN(grade)) continue;
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td>' + subj + '</td><td>' + grade + '</td>';
+    tbody.appendChild(tr);
+  }
+
+  $('avgSection').style.display = 'none';
+  $('resultSection').style.display = 'block';
+  $('resultSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function calcAverage() {
+  if (!currentStudent) return;
+  const { section, grades, avg } = currentStudent;
+
+  let total = 0, count = 0;
+  for (const g of Object.values(grades)) {
+    if (g !== null && !isNaN(g)) { total += g; count++; }
+  }
+
+  $('rA').textContent = avg;
+  $('rTotal').textContent = total + ' / ' + (count * 100);
+
+  const { rank, total: t } = getClassRank(section, avg);
+  $('rRank').textContent = rank + ' / ' + t;
+
+  const b = $('rB'), bt = $('rBText');
+  if (avg >= 90) { bt.textContent = 'ممتاز'; b.className = 'badge'; }
+  else if (avg >= 80) { bt.textContent = 'جيد جداً'; b.className = 'badge'; }
+  else if (avg >= 70) { bt.textContent = 'جيد'; b.className = 'badge warn'; }
+  else if (avg >= 60) { bt.textContent = 'مقبول'; b.className = 'badge warn'; }
+  else { bt.textContent = 'ضعيف'; b.className = 'badge danger'; }
+
+  $('avgSection').style.display = 'block';
+  $('avgSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+$('goBtn').onclick = searchStudent;
+$('calcBtn').onclick = calcAverage;
+$('sid').onkeydown = e => { if (e.key === 'Enter') searchStudent(); };
+</script>
+</body>
+</html>
